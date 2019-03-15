@@ -1,7 +1,3 @@
-
-
-
-
 var config = {
     apiKey: "AIzaSyCs3K5zwuOuS0odq89IpPLC7HnXTOcDqgI",
     authDomain: "recent-user-with-all-use-e8e76.firebaseapp.com",
@@ -15,16 +11,35 @@ var dataRef = firebase.database();
 
 
 $("#submit").on("click", function (event) {
-    var trainName = "";
-    var destination = "";
-    var frequency = "";
-    var firstTrainTime = "";
+    
     event.preventDefault();
-    trainName = $("#trainNameInput").val().trim();
-    destination = $("#destinationInput").val().trim();
-    frequency = $("#frequencyInput").val().trim();
-    firstTrainTime = $("#firstTrainTimeInput").val().trim();
+    var trainName = $("#trainNameInput").val().trim();
+    var destination = $("#destinationInput").val().trim();
+    var frequency = $("#frequencyInput").val().trim();
+    var firstTrainTime = $("#firstTrainTimeInput").val().trim();
 
+    if (trainName.length !== 0 && 
+        destination.length !== 0 && 
+        frequency.length !== 0 && 
+        firstTrainTime.length !== 0 &&
+        isNaN(trainFirstTime) == false && 
+        isNaN(trainFrequency) == false){
+            var newTrain = {
+                name:trainName,
+                destination:destination,
+                firstTrainTime:firstTrainTime,
+                frequency:frequency
+            };
+
+            database.ref().push(newTrain);
+            $("#trainNameInput").val("");
+            $("#destinationInput").val("");
+            $("#frequencyInput").val("");
+            $("#firstTrainTimeInput").val("");
+    }
+    else{
+        if (trainName == "")
+    }
 
 })
 
@@ -41,11 +56,11 @@ function addRow() {
 
 database.ref().on("child_added", function (document) {
 
-    train_name = document.val().TrainName;
+    trainName = document.val().TrainName;
     destination = document.val().Destination;
     frequency = document.val().Frequency;
-    next_arrival = document.val().NextArrival;
-    minutes_away = document.val().MinutesAway;
+    nextArrival = document.val().NextArrival;
+    minutesAway = document.val().MinutesAway;
     addRow();
 });
 
