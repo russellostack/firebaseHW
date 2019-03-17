@@ -1,14 +1,14 @@
 var config = {
-    apiKey: "AIzaSyCs3K5zwuOuS0odq89IpPLC7HnXTOcDqgI",
-    authDomain: "recent-user-with-all-use-e8e76.firebaseapp.com",
-    databaseURL: "https://recent-user-with-all-use-e8e76.firebaseio.com",
-    projectId: "recent-user-with-all-use-e8e76",
-    storageBucket: ""
+    apiKey: "AIzaSyBFubghilD64G6z-0Cgf5hU4OqESxWHAAo",
+    authDomain: "fir-hw-f6bcb.firebaseapp.com",
+    databaseURL: "https://fir-hw-f6bcb.firebaseio.com",
+    projectId: "fir-hw-f6bcb",
+    storageBucket: "fir-hw-f6bcb.appspot.com",
+    messagingSenderId: "796409725321"
 };
 
 firebase.initializeApp(config);
-var dataRef = firebase.database();
-
+var database = firebase.database();
 
 $("#submit").on("click", function (event) {
     
@@ -27,7 +27,7 @@ $("#submit").on("click", function (event) {
             var newTrain = {
                 name:trainName,
                 destination:destination,
-                firstTrainTime:firstTrainTime,
+                startTime:firstTrainTime,
                 frequency:frequency
             };
 
@@ -37,52 +37,38 @@ $("#submit").on("click", function (event) {
             $("#frequencyInput").val("");
             $("#firstTrainTimeInput").val("");
     }
-    else{
-        if (trainName == "")
+    else {
+        $("#title").text("Please add a REAL train!");
     }
-
 })
 
 function addRow() {
+    
+};
+
+database.ref().on("child_added", function (childSnapshot) {
+
+    var trainName = childSnapshot.val().name;
+    var destination = childSnapshot.val().destination;
+    var frequency = childSnapshot.val().frequency;
+    var firstTrainTime = childSnapshot.val().startTime;
+
+    var nextArrival;
+    var minutesAway;
+    var pastFirstTrainTime = moment(firstTrainTime,"hh:mm").subtract(1,"days");
+    var diff = moment().diff(moment(pastFirstTrainTime), "minutes");
+
+    var remainingTime = diff %frequency;
+    minutesAway = frequency- remainingTime;
+
+    var nextTrain = moment().add(minutesAway, "minutes");
+    nextArrival = moment(nextTrain).format("ddd, h:mm a")
     var newRow = $("<tr>").append(
-        $("<td>").text(train_name),
+        $("<td>").text(trainName),
         $("<td>").text(destination),
         $("<td>").text(frequency),
         $("<td>").text(next_arrival),
         $("<td>").text(minutes_away),
     );
     $("#trainTable > tbody").append(newRow);
-};
-
-database.ref().on("child_added", function (document) {
-
-    trainName = document.val().TrainName;
-    destination = document.val().Destination;
-    frequency = document.val().Frequency;
-    nextArrival = document.val().NextArrival;
-    minutesAway = document.val().MinutesAway;
-    addRow();
 });
-
-
-function timeDisplay() {
-    var date = new Date();
-    var hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
-    var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
-    time = hours + ":" + minutes;
-    return time;
-};
-function validTime(time) {
-    return (parseInt(time[0]) != NaN && parseInt(time[1]) != NaN && parseInt(time[3]) != NaN && parseInt(time[4]) != NaN);
-}
-
-function calcArrival() {
-    var trainTime = moment.(first_train_time, "hh:mm").subtract(1, "years");
-    var minuteDifference = moment().diff(moment(trainTime), "minutes");
-    var remainder = minuteDifference % frequency;
-
-    minutes_away = frequency - remainder;
-    var nextTrain = moment().add(minutes_away, "minutes");
-    next_arrival = moment.(nextTrain).format("hh:mm");
-
-}
