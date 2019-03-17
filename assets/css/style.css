@@ -1,0 +1,30 @@
+body{
+    background-color: #907b9b;
+}
+table,th,td{
+    border: 1px solid black;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 18px;
+}
+th{
+    height:40px;
+    font-weight:bolder;
+    width:15%;
+    margin:5px;
+}
+#titleCard{
+    position: relative;
+    width:100%;
+    height:200px;
+    padding:10px;
+}
+#tableCard{
+    width: 80%;
+    height:100%;
+    background-color: aquamarine;
+    margin: 10px;
+}
+#tableCard{
+    box-shadow: 5px 5px blue;
+    width:100%;
+}
